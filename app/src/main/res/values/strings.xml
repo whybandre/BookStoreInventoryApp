@@ -1,0 +1,34 @@
+<resources>
+    <!-- Name for the application [CHAR LIMIT=12] -->
+    <string name="app_name">Book Store Inventory App</string>
+
+    <!-- Label for overflow menu option that inserts fake pet data into the app [CHAR LIMIT=20] -->
+    <string name="action_insert_dummy_data">Insert Dummy Data</string>
+
+    <!-- Label for overflow menu option that deletes all pet data in the app [CHAR LIMIT=20] -->
+    <string name="action_delete_all_entries">Delete All Pets</string>
+
+    <string name="action_settings">Settings</string>
+    <!-- Label for editor menu option to save pet and leave editor [CHAR LIMIT=20] -->
+    <string name="action_save">Save</string>
+
+    <!-- Label for editor overflow menu option that deletes the current pet [CHAR LIMIT=20] -->
+    <string name="action_delete">Delete</string>
+
+    <!-- Title for the activity to add a new Book [CHAR LIMIT=20] -->
+    <string name="editor_activity_title_new_book">Add a Book</string>
+
+    <!-- Labels [CHAR LIMIT=20] -->
+    <string name="new_book">New Book</string>
+    <string name="book_name">Book name</string>
+    <string name="book_price">Price</string>
+    <string name="price_currency">€</string>
+    <string name="book_quantity">Quantity</string>
+    <string name="book_supplier_name">Supplier Name</string>
+    <string name="book_supplier_phone_number">Supplier Phone Number</string>
+
+    <string name="supplier_unknown">Unknown</string>
+    <string name="supplier_penguin">Penguin</string>
+    <string name="supplier_pearson">Pearson</string>
+    <string name="supplier_leya">Leya</string>
+</resources>

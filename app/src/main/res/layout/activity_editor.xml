@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".EditorActivity">
+
+    <TextView
+        style="@style/BookEditorTitleStyle"
+        android:text="@string/new_book"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/BookEditorTextStyle"
+            android:text="@string/book_name" />
+
+        <RelativeLayout
+            android:layout_width="@dimen/dimen_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="2">
+
+            <EditText
+                android:id="@+id/book_name_edit_text"
+                style="@style/BookEditorFormEditStyle"
+                android:hint="@string/book_name"
+                android:inputType="textCapWords" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/BookEditorTextStyle"
+            android:text="@string/book_price" />
+
+        <RelativeLayout
+            android:layout_width="@dimen/dimen_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="2">
+
+            <EditText
+                android:id="@+id/book_price_edit_text"
+                style="@style/BookEditorFormEditStyle"
+                android:hint="@string/book_price"
+                android:inputType="number" />
+
+            <TextView
+                style="@style/CurrencyTextStyle"
+                android:text="@string/price_currency" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/BookEditorTextStyle"
+            android:text="@string/book_quantity" />
+
+        <RelativeLayout
+            android:layout_width="@dimen/dimen_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="2">
+
+            <EditText
+                android:id="@+id/book_quantity_edit_text"
+                style="@style/BookEditorFormEditStyle"
+                android:hint="@string/book_quantity"
+                android:inputType="number" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/BookEditorTextStyle"
+            android:text="@string/book_supplier_name" />
+
+        <Spinner
+            style="@style/BookEditorSpinner"
+            android:id="@+id/book_supplier_name_spinner"
+            android:spinnerMode="dropdown" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/BookEditorTextStyle"
+            android:text="@string/book_supplier_phone_number" />
+
+        <RelativeLayout
+            android:layout_width="@dimen/dimen_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="2">
+
+            <EditText
+                android:id="@+id/book_supplier_phone_number_edit_text"
+                style="@style/BookEditorFormEditStyle"
+                android:hint="@string/book_supplier_phone_number"
+                android:inputType="number" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>
