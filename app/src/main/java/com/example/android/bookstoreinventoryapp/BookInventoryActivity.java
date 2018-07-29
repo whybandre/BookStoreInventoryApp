@@ -1,23 +1,39 @@
 package com.example.android.bookstoreinventoryapp;
 
+import android.app.LoaderManager;
+import android.content.ContentUris;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.Toast;
 
-import android.widget.TextView;
-
-
+import com.example.android.bookstoreinventoryapp.data.BookInventoryContract;
 import com.example.android.bookstoreinventoryapp.data.BookInventoryContract.InventoryEntry;
-import com.example.android.bookstoreinventoryapp.data.BookInventoryDbHelper;
 
-public class BookInventoryActivity extends AppCompatActivity {
+public class BookInventoryActivity extends AppCompatActivity
+        implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    /** Database helper that will provide us access to the database */
-    private BookInventoryDbHelper mDbHelper;
+
+    /**
+     * Identifier for the book data loader
+     */
+    private static final int BOOK_LOADER = 0;
+
+    /**
+     * Adapter for the ListView
+     */
+    BookCursorAdapter mCursorAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +41,7 @@ public class BookInventoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_book_inventory);
 
         // Setup FAB to open EditorActivity
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -33,25 +49,75 @@ public class BookInventoryActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        // To access our database, we instantiate our subclass of SQLiteOpenHelper
-        // and pass the context, which is the current activity.
-        mDbHelper = new BookInventoryDbHelper(this);
+
+        // Find the ListView which will be populated with the book inventory data
+        ListView bookListView = findViewById(R.id.list_all_books);
+
+        // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
+        View emptyView = findViewById(R.id.empty_view);
+        bookListView.setEmptyView(emptyView);
+
+        // Setup an Adapter to create a list item for each row of book inventory data in the Cursor.
+        // There is no book data yet (until the loader finishes) so pass in null for the Cursor.
+        mCursorAdapter = new BookCursorAdapter(this, null);
+        bookListView.setAdapter(mCursorAdapter);
+
+        // Setup the item click listener
+        bookListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Toast.makeText(BookInventoryActivity.this, R.string.edit_book_info,
+                        Toast.LENGTH_SHORT).show();
+
+                // Create new intent to go to {@link EditorActivity}
+                Intent intent = new Intent(BookInventoryActivity.this, EditorActivity.class);
+
+                // Form the content URI that represents the specific book that was clicked on,
+                // by appending the "id" (passed as input to this method) onto the
+                // {@link InventoryEntry#CONTENT_URI}.
+                // For example, the URI would be "content://com.example.android.bookstoreinventoryapp/book/5"
+                // if the book with ID 5 was clicked on.
+                Uri currentBookUri = ContentUris.withAppendedId(BookInventoryContract.InventoryEntry.CONTENT_URI, id);
+
+                // Set the URI on the data field of the intent
+                intent.setData(currentBookUri);
+
+                // Launch the {@link EditorActivity} to display the data for the selected book.
+                startActivity(intent);
+            }
+        });
+
+        // Kick off the loader
+        getLoaderManager().initLoader(BOOK_LOADER, null, this);
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        displayDatabaseInfo();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu options from the res/menu/menu_inventory.xml file.
+        // This adds menu items to the app bar.
+        getMenuInflater().inflate(R.menu.menu_inventory, menu);
+        return true;
     }
 
-    /**
-     * Temporary helper method to display information in the onscreen TextView about the state of
-     * the pets database.
-     */
-    private void displayDatabaseInfo() {
-        // Create and/or open a database to read from it
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // User clicked on a menu option in the app bar overflow menu
+        switch (item.getItemId()) {
+            // Respond to a click on the "Add new book" menu option
+            case R.id.action_insert_data:
+                Intent intent = new Intent(BookInventoryActivity.this, EditorActivity.class);
+                startActivity(intent);
+                return true;
+            // Respond to a click on the "Delete all entries" menu option
+            case R.id.action_delete_all_entries:
+                deleteAll();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
         String[] projection = {
@@ -63,83 +129,32 @@ public class BookInventoryActivity extends AppCompatActivity {
                 InventoryEntry.COLUMN_BOOK_SUPPLIER_PHONE_NUMBER
         };
 
-        Cursor cursor = db.query(
-                InventoryEntry.TABLE_NAME,
-                projection,
-                null,
-                null,
-                null,
-                null,
-                null
-        );
+        // This loader will execute the ContentProvider's query method on a background thread
+        return new CursorLoader(this,   // Parent activity context
+                BookInventoryContract.InventoryEntry.CONTENT_URI,   // Provider content URI to query
+                projection,             // Columns to include in the resulting Cursor
+                null,          // No selection clause
+                null,       // No selection arguments
+                null);         // Default sort order
+    }
 
-        TextView displayView = findViewById(R.id.text_view_book);
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        // Update {@link BookCursorAdapter} with this new cursor containing updated books data
+        mCursorAdapter.swapCursor(data);
+    }
 
-        try {
-            // Create a header in the Text View that looks like this:
-            //
-            // The books table contains <number of rows in Cursor> pets.
-            // All separated by a paragraph _id - name - price - quantity - supplier name - supplier phone number
-            //
-            // In the while loop below, iterate through the rows of the cursor and display
-            // the information from each column in this order.
-            displayView.setText("Their are " + cursor.getCount() + " books in inventory.\n\n");
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        // Callback called when the data needs to be deleted
+        mCursorAdapter.swapCursor(null);
+    }
 
-            displayView.append("The "+ InventoryEntry.TABLE_NAME + " table columns are:\n\n");
-            displayView.append(InventoryEntry._ID + " \n " +
-                    InventoryEntry.COLUMN_BOOK_NAME + " \n " +
-                    InventoryEntry.COLUMN_BOOK_PRICE + " \n " +
-                    InventoryEntry.COLUMN_BOOK_QUANTITY + " \n " +
-                    InventoryEntry.COLUMN_BOOK_SUPPLIER_NAME + " \n " +
-                    InventoryEntry.COLUMN_BOOK_SUPPLIER_PHONE_NUMBER + "\n");
-
-            // Figure out the index of each column
-            int idColumnIndex = cursor.getColumnIndex(InventoryEntry._ID);
-            int nameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_BOOK_NAME);
-            int priceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_BOOK_PRICE);
-            int quantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_BOOK_QUANTITY);
-            int supplierNameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_BOOK_SUPPLIER_NAME);
-            int supplierPhoneColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_BOOK_SUPPLIER_PHONE_NUMBER);
-
-            // Iterate through all the returned rows in the cursor
-            while (cursor.moveToNext()) {
-                // Use that index to extract the String or Int value of the word
-                // at the current row the cursor is on.
-                int currentID = cursor.getInt(idColumnIndex);
-                String currentName = cursor.getString(nameColumnIndex);
-                float currentPrice = cursor.getFloat(priceColumnIndex);
-                int currentQuantity = cursor.getInt(quantityColumnIndex);
-                String currentNameSupplier = cursor.getString(supplierNameColumnIndex);
-                String currentPhoneSupplier = cursor.getString(supplierPhoneColumnIndex);
-
-                // Display the values from each column of the current row in the cursor in the TextView
-                displayView.append(("\n" +
-                        currentID + " \n " +
-                        currentName + " \n " +
-                        currentPrice + " \n " +
-                        currentQuantity + " \n " +
-                        currentNameSupplier + " \n " +
-                        currentPhoneSupplier + " \n "));
-            }
-        } finally {
-            // Always close the cursor when you're done reading from it. This releases all its
-            // resources and makes it invalid.
-            cursor.close();
-        }
+    /**
+     * Helper method to delete all entries in the database.
+     */
+    private void deleteAll() {
+        int rowsDeleted = getContentResolver().delete(BookInventoryContract.InventoryEntry.CONTENT_URI, null, null);
+        Log.v("BookInventoryActivity", rowsDeleted + " rows deleted from database");
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

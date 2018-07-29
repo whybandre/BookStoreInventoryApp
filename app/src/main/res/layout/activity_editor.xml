@@ -51,7 +51,7 @@
                 android:id="@+id/book_price_edit_text"
                 style="@style/BookEditorFormEditStyle"
                 android:hint="@string/book_price"
-                android:inputType="number" />
+                android:inputType="numberDecimal" />
 
             <TextView
                 style="@style/CurrencyTextStyle"
@@ -73,11 +73,26 @@
             android:layout_height="wrap_content"
             android:layout_weight="2">
 
+            <Button
+                android:id="@+id/decrease_button"
+                style="@style/decreaseIncreaseButton"
+                android:background="@drawable/button_sale_rectangle"
+                android:text="@string/bt_minus" />
+
             <EditText
                 android:id="@+id/book_quantity_edit_text"
-                style="@style/BookEditorFormEditStyle"
+                style="@style/BookEditorQuantityEditStyle"
                 android:hint="@string/book_quantity"
-                android:inputType="number" />
+                android:layout_toRightOf="@id/decrease_button"
+                android:inputType="number"
+                android:textAlignment="center" />
+
+            <Button
+                android:id="@+id/increase_button"
+                style="@style/decreaseIncreaseButton"
+                android:layout_toRightOf="@id/book_quantity_edit_text"
+                android:background="@drawable/button_sale_rectangle"
+                android:text="@string/bt_plus" />
         </RelativeLayout>
     </LinearLayout>
 
@@ -114,8 +129,13 @@
                 android:id="@+id/book_supplier_phone_number_edit_text"
                 style="@style/BookEditorFormEditStyle"
                 android:hint="@string/book_supplier_phone_number"
-                android:inputType="number" />
+                android:inputType="phone" />
         </RelativeLayout>
     </LinearLayout>
 
+    <Button
+        android:id="@+id/order_button"
+        style="@style/orderMoreButton"
+        android:background="@drawable/button_sale_rectangle"
+        android:text="@string/bt_order" />
 </LinearLayout>

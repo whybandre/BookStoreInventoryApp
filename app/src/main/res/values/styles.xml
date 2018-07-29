@@ -33,10 +33,17 @@
         <item name="android:textSize">@dimen/dimen_text_12</item>
     </style>
 
+    <!-- activity_editor styles -->
     <style name="BookEditorSpinner">
         <item name="android:layout_height">@dimen/dimen_48</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:paddingRight">@dimen/dimen_16</item>
+    </style>
+
+    <style name="BookEditorQuantityEditStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">150dp</item>
+        <item name="android:textAppearance">?android:textAppearanceSmall</item>
     </style>
 
     <style name="BookEditorFormEditStyle">
@@ -47,7 +54,7 @@
 
     <style name="BookEditorTitleStyle">
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:layout_marginBottom">@dimen/dimen_20</item>
         <item name="android:textColor">@color/colorPrimary</item>
@@ -59,11 +66,26 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:paddingRight">@dimen/dimen_16</item>
-        <item name="android:paddingTop">@dimen/dimen_16</item>
+        <item name="android:paddingTop">@dimen/dimen_10</item>
         <item name="android:textAppearance">?android:textAppearanceSmall</item>
     </style>
 
+    <style name="decreaseIncreaseButton">
+        <item name="android:layout_height">@dimen/dimen_30</item>
+        <item name="android:layout_width">@dimen/dimen_30</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 
+    <style name="orderMoreButton">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_margin">@dimen/dimen_20</item>
+        <item name="android:padding">@dimen/dimen_16</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- activity_editor styles [CHAR LIMIT=20] -->
     <style name="FloatingActionButton">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
@@ -80,4 +102,60 @@
         <item name="android:padding">@dimen/activity_margin</item>
     </style>
 
+    <style name="empty_database_image_background">
+        <item name="android:layout_height">@dimen/dimen_100</item>
+        <item name="android:layout_width">@dimen/dimen_100</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
+
+    <style name="emptyDatabaseTextTitle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_below">@id/empty_database</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:paddingTop">@dimen/dimen_16</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="emptyDatabaseTextSubtitle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_below">@id/empty_title_text</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:paddingTop">@dimen/dimen_8</item>
+        <item name="android:textColor">@color/emptyDatabaseTextSubtitleColor</item>
+    </style>
+
+    <!-- list_item styles [CHAR LIMIT=20] -->
+    <style name="bookTitle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/mainText</item>
+    </style>
+
+    <style name="bookSubTitle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textColor">@color/mainText</item>
+    </style>
+
+    <style name="bookSubTitleRightSide">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textColor">@color/mainText</item>
+        <item name="android:layout_marginLeft">@dimen/dimen_8</item>
+    </style>
+
+    <style name="buttonSale">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:focusable">false</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_margin">@dimen/dimen_16</item>
+    </style>
 </resources>
+
